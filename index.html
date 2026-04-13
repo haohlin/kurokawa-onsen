@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kurokawa Onsen — A Travel Guide</title>
+
+<!-- Fonts: Playfair Display + Zen Kaku Gothic New -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<style>
+/* ===========================================
+   CSS CUSTOM PROPERTIES — MOUNTAIN FOREST THEME
+   =========================================== */
+:root {
+    --bg-primary: #151e17;
+    --bg-deep: #0f1610;
+    --bg-mist: #1c2a1f;
+    --text-primary: #e8e4db;
+    --text-secondary: #8a9a82;
+    --text-muted: #5e6e56;
+    --accent-wood: #c4956a;
+    --accent-moss: #5a7a52;
+    --accent-cedar: #a07850;
+    --accent-mist: rgba(180, 200, 180, 0.06);
+
+    --font-display: 'Playfair Display', serif;
+    --font-body: 'Zen Kaku Gothic New', sans-serif;
+    --title-size: clamp(2rem, 6vw, 5rem);
+    --h2-size: clamp(1.5rem, 4vw, 3rem);
+    --h3-size: clamp(1rem, 2vw, 1.4rem);
+    --subtitle-size: clamp(0.8rem, 1.5vw, 1.1rem);
+    --body-size: clamp(0.75rem, 1.2vw, 1rem);
+    --small-size: clamp(0.6rem, 0.9vw, 0.8rem);
+    --label-size: clamp(0.55rem, 0.8vw, 0.7rem);
+
+    --slide-padding: clamp(1.5rem, 5vw, 5rem);
+    --content-gap: clamp(0.5rem, 2vw, 2rem);
+    --element-gap: clamp(0.25rem, 1vw, 1rem);
+
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --duration-normal: 0.7s;
+    --duration-slow: 1.2s;
+}
+
+/* === BASE === */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* === VIEWPORT-BASE.CSS — MANDATORY === */
+html, body { height: 100%; overflow-x: hidden; }
+html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+.slide {
+    width: 100vw; height: 100vh; height: 100dvh;
+    overflow: hidden; scroll-snap-align: start;
+    display: flex; flex-direction: column; position: relative;
+}
+.slide-content {
+    flex: 1; display: flex; flex-direction: column;
+    justify-content: center; max-height: 100%;
+    overflow: hidden; padding: var(--slide-padding);
+}
+img, .image-container { max-width: 100%; max-height: min(50vh, 400px); object-fit: contain; }
+.feature-list li, .bullet-list li { font-size: var(--body-size); line-height: 1.4; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: clamp(0.5rem, 1.5vw, 1rem); }
+.card, .container, .content-box { max-width: min(90vw, 1000px); max-height: min(80vh, 700px); }
+
+@media (max-height: 700px) {
+    :root { --slide-padding: clamp(0.75rem, 3vw, 2rem); --content-gap: clamp(0.4rem, 1.5vw, 1rem); --title-size: clamp(1.25rem, 4.5vw, 2.5rem); --h2-size: clamp(1rem, 3vw, 1.75rem); }
+}
+@media (max-height: 600px) {
+    :root { --slide-padding: clamp(0.5rem, 2.5vw, 1.5rem); --content-gap: clamp(0.3rem, 1vw, 0.75rem); --title-size: clamp(1.1rem, 4vw, 2rem); --body-size: clamp(0.7rem, 1.2vw, 0.95rem); }
+    .nav-dots, .keyboard-hint, .decorative, .css-mountains { display: none; }
+}
+@media (max-height: 500px) {
+    :root { --slide-padding: clamp(0.4rem, 2vw, 1rem); --title-size: clamp(1rem, 3.5vw, 1.5rem); --h2-size: clamp(0.9rem, 2.5vw, 1.25rem); --body-size: clamp(0.65rem, 1vw, 0.85rem); }
+}
+@media (max-width: 600px) {
+    :root { --title-size: clamp(1.25rem, 7vw, 2.5rem); }
+    .grid, .two-col { grid-template-columns: 1fr; }
+    .photo-panel { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.2s !important; }
+    html { scroll-behavior: auto; }
+}
+/* === END VIEWPORT-BASE === */
+
+/* ===========================================
+   GLOBAL STYLES
+   =========================================== */
+body {
+    background: var(--bg-deep);
+    font-family: var(--font-body);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+}
+.slide {
+    background: var(--bg-primary);
+}
+.slide::before {
+    content: ''; position: absolute; inset: 0;
+    background:
+        radial-gradient(ellipse at 30% 70%, var(--accent-mist) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 30%, rgba(140, 170, 140, 0.04) 0%, transparent 40%);
+    pointer-events: none; z-index: 0;
+}
+
+/* Accent line */
+.slide-accent {
+    position: absolute; left: clamp(2rem, 5vw, 5rem); top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--accent-wood) 30%, var(--accent-wood) 70%, transparent);
+    opacity: 0.15; z-index: 1;
+}
+
+/* ===========================================
+   TYPOGRAPHY
+   =========================================== */
+h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.1; letter-spacing: -0.02em; }
+h1 { font-size: var(--title-size); }
+h2 { font-size: var(--h2-size); }
+h3 { font-size: var(--h3-size); }
+h2 em, h1 em { font-style: italic; color: var(--accent-wood); }
+
+.jp-text { font-family: var(--font-body); font-weight: 300; color: var(--text-secondary); letter-spacing: 0.3em; font-size: var(--small-size); }
+.section-label { font-family: var(--font-body); font-size: var(--label-size); color: var(--accent-wood); letter-spacing: 0.5em; text-transform: uppercase; font-weight: 500; margin-bottom: clamp(0.8rem, 2vh, 1.5rem); }
+.body-text { font-size: var(--body-size); color: var(--text-secondary); line-height: 1.7; font-weight: 300; max-width: 600px; }
+.diamond { width: 6px; height: 6px; background: var(--accent-wood); transform: rotate(45deg); opacity: 0.6; }
+.rule { width: clamp(40px, 6vw, 80px); height: 1px; background: var(--accent-wood); opacity: 0.3; }
+
+/* ===========================================
+   REVEAL ANIMATIONS
+   =========================================== */
+.reveal { opacity: 0; transform: translateY(25px); transition: opacity var(--duration-normal) var(--ease-out-expo), transform var(--duration-normal) var(--ease-out-expo); }
+.slide.visible .reveal { opacity: 1; transform: translateY(0); }
+.reveal:nth-child(1) { transition-delay: 0.1s; }
+.reveal:nth-child(2) { transition-delay: 0.2s; }
+.reveal:nth-child(3) { transition-delay: 0.3s; }
+.reveal:nth-child(4) { transition-delay: 0.4s; }
+.reveal:nth-child(5) { transition-delay: 0.5s; }
+.reveal:nth-child(6) { transition-delay: 0.6s; }
+.reveal-slow { opacity: 0; transition: opacity var(--duration-slow) ease; }
+.slide.visible .reveal-slow { opacity: 1; }
+
+/* ===========================================
+   PROGRESS BAR & NAV DOTS
+   =========================================== */
+.progress-bar { position: fixed; top: 0; left: 0; height: 2px; background: var(--accent-wood); z-index: 1000; transition: width 0.3s ease; opacity: 0.6; }
+.nav-dots { position: fixed; right: clamp(0.8rem, 2vw, 1.5rem); top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: clamp(6px, 1vh, 10px); z-index: 1000; }
+.nav-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-muted); border: none; cursor: pointer; transition: all 0.3s ease; padding: 0; }
+.nav-dot.active { background: var(--accent-wood); transform: scale(1.4); }
+.nav-dot:hover { background: var(--text-secondary); }
+
+/* ===========================================
+   CSS MOUNTAIN SILHOUETTES — decorative layer
+   =========================================== */
+.css-mountains {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: clamp(80px, 20vh, 200px);
+    pointer-events: none; z-index: 0;
+}
+.mountain-layer {
+    position: absolute; bottom: 0; left: 0; right: 0;
+}
+.mountain-layer-1 {
+    height: clamp(60px, 15vh, 150px);
+    background: linear-gradient(135deg, #0f1a12 20%, #152018 50%, #0f1a12 80%);
+    clip-path: polygon(0% 100%, 0% 60%, 8% 40%, 15% 55%, 25% 20%, 35% 45%, 45% 15%, 55% 35%, 65% 10%, 75% 30%, 82% 50%, 90% 25%, 100% 45%, 100% 100%);
+}
+.mountain-layer-2 {
+    height: clamp(40px, 10vh, 100px);
+    background: linear-gradient(135deg, #1a2e1c 20%, #1c301f 50%, #1a2e1c 80%);
+    clip-path: polygon(0% 100%, 0% 50%, 10% 30%, 20% 55%, 35% 20%, 50% 40%, 60% 25%, 75% 45%, 85% 30%, 100% 50%, 100% 100%);
+    opacity: 0.8;
+}
+.mountain-layer-3 {
+    height: clamp(25px, 6vh, 60px);
+    background: var(--bg-mist);
+    clip-path: polygon(0% 100%, 0% 40%, 15% 25%, 30% 50%, 50% 15%, 70% 40%, 85% 20%, 100% 45%, 100% 100%);
+    opacity: 0.6;
+}
+
+/* ===========================================
+   STEAM PARTICLES — CSS animated
+   =========================================== */
+.steam-container {
+    position: absolute; z-index: 0; pointer-events: none;
+}
+.steam-puff {
+    position: absolute; border-radius: 50%;
+    background: radial-gradient(circle, rgba(200, 220, 200, 0.06) 0%, transparent 70%);
+    animation: steamFloat 6s ease-in-out infinite;
+}
+.steam-puff:nth-child(1) { width: clamp(40px, 8vw, 80px); height: clamp(40px, 8vw, 80px); bottom: 0; left: 10%; animation-delay: 0s; }
+.steam-puff:nth-child(2) { width: clamp(30px, 6vw, 60px); height: clamp(30px, 6vw, 60px); bottom: 10%; left: 30%; animation-delay: 2s; }
+.steam-puff:nth-child(3) { width: clamp(50px, 10vw, 100px); height: clamp(50px, 10vw, 100px); bottom: -5%; left: 50%; animation-delay: 4s; }
+@keyframes steamFloat {
+    0% { transform: translateY(0) scale(1); opacity: 0; }
+    20% { opacity: 0.8; }
+    80% { opacity: 0.3; }
+    100% { transform: translateY(clamp(-40px, -8vh, -80px)) scale(1.5); opacity: 0; }
+}
+
+/* ===========================================
+   PHOTO PANELS — slide backgrounds & insets
+   =========================================== */
+.photo-bg {
+    position: absolute; inset: 0;
+    background-size: cover; background-position: center;
+    z-index: 0;
+}
+.photo-bg::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to right, var(--bg-primary) 35%, rgba(21, 30, 23, 0.7) 60%, rgba(21, 30, 23, 0.4) 100%);
+}
+.photo-panel {
+    position: absolute; right: 0; top: 0; bottom: 0;
+    width: clamp(200px, 35vw, 500px);
+    background-size: cover; background-position: center;
+    z-index: 0;
+}
+.photo-panel::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to right, var(--bg-primary) 0%, rgba(21, 30, 23, 0.3) 40%, rgba(21, 30, 23, 0.15) 100%);
+}
+.photo-inset {
+    border-radius: clamp(6px, 0.8vw, 12px);
+    overflow: hidden;
+    max-height: min(35vh, 280px);
+    position: relative;
+}
+.photo-inset img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    max-height: min(35vh, 280px);
+}
+
+/* ===========================================
+   CSS LANTERN ILLUSTRATION
+   =========================================== */
+.css-lantern {
+    position: relative;
+    width: clamp(20px, 3vw, 35px);
+    height: clamp(30px, 5vw, 55px);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 180, 80, 0.9) 20%, rgba(255, 140, 40, 0.6) 60%, transparent 80%);
+    box-shadow: 0 0 clamp(10px, 2vw, 25px) rgba(255, 160, 60, 0.4), 0 0 clamp(20px, 4vw, 50px) rgba(255, 140, 40, 0.15);
+    animation: lanternGlow 3s ease-in-out infinite;
+}
+.css-lantern::before {
+    content: ''; position: absolute; top: calc(-1 * clamp(4px, 0.5vw, 8px)); left: 50%;
+    transform: translateX(-50%);
+    width: clamp(8px, 1.2vw, 14px); height: clamp(4px, 0.5vw, 8px);
+    background: var(--accent-cedar); border-radius: 2px 2px 0 0;
+}
+.css-lantern::after {
+    content: ''; position: absolute; top: calc(-1 * clamp(12px, 1.5vw, 20px)); left: 50%;
+    width: 1px; height: clamp(8px, 1vw, 12px);
+    background: rgba(200, 180, 160, 0.3);
+}
+@keyframes lanternGlow {
+    0%, 100% { opacity: 0.8; filter: brightness(1); }
+    50% { opacity: 1; filter: brightness(1.2); }
+}
+.lantern-row {
+    position: absolute; bottom: clamp(2rem, 5vh, 4rem); left: 0; right: 0;
+    display: flex; justify-content: center;
+    gap: clamp(15px, 4vw, 40px);
+    z-index: 0; pointer-events: none;
+}
+.lantern-row .css-lantern:nth-child(2) { animation-delay: 0.5s; transform: translateY(clamp(5px, 1vh, 10px)); }
+.lantern-row .css-lantern:nth-child(3) { animation-delay: 1s; }
+.lantern-row .css-lantern:nth-child(4) { animation-delay: 1.5s; transform: translateY(clamp(8px, 1.5vh, 15px)); }
+.lantern-row .css-lantern:nth-child(5) { animation-delay: 2s; transform: translateY(clamp(3px, 0.5vh, 6px)); }
+
+/* ===========================================
+   CSS CHERRY BLOSSOMS — falling animation
+   =========================================== */
+.sakura-container {
+    position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+}
+.sakura-petal {
+    position: absolute; top: -20px;
+    width: clamp(8px, 1.2vw, 14px); height: clamp(8px, 1.2vw, 14px);
+    background: radial-gradient(ellipse, rgba(255, 183, 197, 0.7) 30%, rgba(255, 183, 197, 0.2) 70%);
+    border-radius: 50% 0 50% 0;
+    animation: sakuraFall linear infinite;
+}
+.sakura-petal:nth-child(1) { left: 10%; animation-duration: 8s; animation-delay: 0s; }
+.sakura-petal:nth-child(2) { left: 25%; animation-duration: 10s; animation-delay: 2s; }
+.sakura-petal:nth-child(3) { left: 40%; animation-duration: 7s; animation-delay: 4s; }
+.sakura-petal:nth-child(4) { left: 60%; animation-duration: 9s; animation-delay: 1s; }
+.sakura-petal:nth-child(5) { left: 75%; animation-duration: 11s; animation-delay: 3s; }
+.sakura-petal:nth-child(6) { left: 90%; animation-duration: 8s; animation-delay: 5s; }
+@keyframes sakuraFall {
+    0% { transform: translateY(-20px) rotate(0deg) translateX(0); opacity: 0; }
+    10% { opacity: 0.8; }
+    90% { opacity: 0.6; }
+    100% { transform: translateY(100vh) rotate(360deg) translateX(clamp(30px, 5vw, 60px)); opacity: 0; }
+}
+
+/* ===========================================
+   INTERACTIVE FEATURE CARDS
+   =========================================== */
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, clamp(180px, 22vw, 280px)), 1fr));
+    gap: clamp(0.6rem, 1.5vw, 1.2rem);
+    margin-top: clamp(0.8rem, 2vh, 1.5rem);
+}
+.feature-card {
+    background: rgba(90, 122, 82, 0.06);
+    border: 1px solid rgba(90, 122, 82, 0.1);
+    border-radius: clamp(6px, 0.8vw, 12px);
+    padding: clamp(0.8rem, 2vw, 1.5rem);
+    transition: all 0.3s var(--ease-out-expo);
+    cursor: pointer;
+    position: relative;
+}
+.feature-card:hover {
+    border-color: var(--accent-wood);
+    background: rgba(90, 122, 82, 0.12);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+.feature-card h3 { font-size: var(--h3-size); margin-bottom: clamp(0.3rem, 0.8vh, 0.6rem); color: var(--text-primary); }
+.feature-card p { font-size: var(--small-size); color: var(--text-secondary); line-height: 1.5; font-weight: 300; }
+.card-icon { font-size: clamp(1.2rem, 2vw, 1.6rem); margin-bottom: clamp(0.3rem, 0.8vh, 0.6rem); display: block; }
+
+/* "Click for more" hint */
+.card-hint {
+    position: absolute; bottom: clamp(4px, 0.5vh, 8px); right: clamp(6px, 1vw, 12px);
+    font-size: clamp(0.5rem, 0.7vw, 0.65rem);
+    color: var(--accent-wood);
+    opacity: 0; transition: opacity 0.3s ease;
+    font-family: var(--font-body); letter-spacing: 0.1em;
+}
+.feature-card:hover .card-hint { opacity: 0.7; }
+
+/* ===========================================
+   MODAL SYSTEM — detailed info overlay
+   =========================================== */
+.modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(10, 16, 10, 0.85);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    z-index: 2000;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+.modal-overlay.active { opacity: 1; pointer-events: auto; }
+.modal-content {
+    background: linear-gradient(160deg, #1a2e1e 0%, var(--bg-primary) 100%);
+    border: 1px solid rgba(90, 122, 82, 0.2);
+    border-radius: clamp(8px, 1vw, 16px);
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    max-width: min(90vw, 600px);
+    max-height: min(85vh, 700px);
+    overflow-y: auto;
+    position: relative;
+    transform: translateY(20px);
+    transition: transform 0.3s var(--ease-out-expo);
+}
+.modal-overlay.active .modal-content { transform: translateY(0); }
+.modal-close {
+    position: absolute; top: clamp(0.5rem, 1vh, 1rem); right: clamp(0.5rem, 1vw, 1rem);
+    background: none; border: none; color: var(--text-secondary);
+    font-size: clamp(1.2rem, 2vw, 1.5rem); cursor: pointer;
+    padding: 0.3rem; line-height: 1;
+    transition: color 0.2s;
+}
+.modal-close:hover { color: var(--text-primary); }
+.modal-content h3 {
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+    margin-bottom: clamp(0.3rem, 0.8vh, 0.5rem);
+    color: var(--text-primary);
+}
+.modal-content .modal-subtitle {
+    font-size: var(--small-size); color: var(--accent-wood);
+    letter-spacing: 0.1em; margin-bottom: clamp(0.8rem, 1.5vh, 1.2rem);
+}
+.modal-content .modal-body {
+    font-size: var(--body-size); color: var(--text-secondary);
+    line-height: 1.7; font-weight: 300;
+}
+.modal-content .modal-body p { margin-bottom: clamp(0.5rem, 1vh, 0.8rem); }
+.modal-photo {
+    width: 100%; max-height: min(30vh, 250px);
+    object-fit: cover; border-radius: clamp(4px, 0.5vw, 8px);
+    margin-bottom: clamp(0.8rem, 1.5vh, 1.2rem);
+}
+.modal-links {
+    display: flex; flex-wrap: wrap; gap: clamp(0.4rem, 0.8vw, 0.6rem);
+    margin-top: clamp(0.8rem, 1.5vh, 1.2rem);
+}
+.modal-link {
+    display: inline-flex; align-items: center; gap: 0.3rem;
+    padding: clamp(0.3rem, 0.6vw, 0.5rem) clamp(0.6rem, 1vw, 0.8rem);
+    background: rgba(90, 122, 82, 0.1);
+    border: 1px solid rgba(90, 122, 82, 0.2);
+    border-radius: 20px;
+    color: var(--accent-wood);
+    text-decoration: none;
+    font-size: var(--small-size);
+    font-family: var(--font-body);
+    transition: all 0.2s ease;
+}
+.modal-link:hover { background: rgba(90, 122, 82, 0.2); border-color: var(--accent-wood); }
+
+/* ===========================================
+   TOOLTIP SYSTEM
+   =========================================== */
+.has-tooltip {
+    position: relative; cursor: help;
+    border-bottom: 1px dotted var(--accent-wood);
+}
+.tooltip-text {
+    position: absolute; bottom: 100%; left: 50%;
+    transform: translateX(-50%) translateY(-5px);
+    background: #1a2e1e; border: 1px solid rgba(90, 122, 82, 0.3);
+    border-radius: 6px; padding: clamp(0.3rem, 0.6vw, 0.5rem) clamp(0.5rem, 0.8vw, 0.7rem);
+    font-size: var(--small-size); color: var(--text-secondary);
+    white-space: nowrap; pointer-events: none;
+    opacity: 0; transition: opacity 0.2s ease;
+    z-index: 100;
+}
+.has-tooltip:hover .tooltip-text { opacity: 1; }
+
+/* ===========================================
+   INFO ITEMS & LISTS
+   =========================================== */
+.info-list { display: flex; flex-direction: column; gap: clamp(0.5rem, 1.2vh, 0.9rem); margin-top: clamp(0.5rem, 1.5vh, 1rem); }
+.info-item { display: flex; align-items: flex-start; gap: clamp(0.5rem, 1vw, 0.8rem); }
+.info-icon { font-size: clamp(0.9rem, 1.5vw, 1.2rem); flex-shrink: 0; margin-top: 2px; }
+.info-text { font-size: var(--body-size); color: var(--text-secondary); line-height: 1.5; font-weight: 300; }
+.info-text strong { color: var(--text-primary); font-weight: 500; }
+
+/* ===========================================
+   TWO-COLUMN LAYOUT
+   =========================================== */
+.two-col {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    margin-top: clamp(0.5rem, 1.5vh, 1rem);
+}
+@media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+
+/* ===========================================
+   HIGHLIGHT BOX
+   =========================================== */
+.highlight-box {
+    background: linear-gradient(135deg, rgba(90, 122, 82, 0.08) 0%, rgba(196, 149, 106, 0.05) 100%);
+    border-left: 2px solid var(--accent-wood);
+    padding: clamp(0.6rem, 1.5vw, 1.2rem) clamp(0.8rem, 2vw, 1.5rem);
+    border-radius: 0 clamp(4px, 0.5vw, 8px) clamp(4px, 0.5vw, 8px) 0;
+    margin-top: clamp(0.5rem, 1.5vh, 1rem);
+}
+.highlight-box p { font-size: var(--body-size); color: var(--text-secondary); line-height: 1.6; font-weight: 300; }
+.highlight-box strong { color: var(--accent-wood); font-weight: 500; }
+
+/* ===========================================
+   SEASON CARDS
+   =========================================== */
+.season-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, clamp(140px, 18vw, 220px)), 1fr));
+    gap: clamp(0.5rem, 1.2vw, 1rem);
+    margin-top: clamp(0.5rem, 1.5vh, 1rem);
+}
+.season-card {
+    text-align: center;
+    padding: clamp(0.8rem, 2vw, 1.5rem) clamp(0.5rem, 1vw, 0.8rem);
+    border-radius: clamp(6px, 0.8vw, 12px);
+    border: 1px solid rgba(90, 122, 82, 0.1);
+    cursor: pointer;
+    transition: all 0.3s var(--ease-out-expo);
+}
+.season-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent-wood);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+.season-card .season-icon { font-size: clamp(1.5rem, 3vw, 2.2rem); margin-bottom: clamp(0.3rem, 0.8vh, 0.5rem); }
+.season-card h3 { font-size: clamp(0.85rem, 1.3vw, 1.1rem); margin-bottom: clamp(0.2rem, 0.5vh, 0.4rem); }
+.season-card p { font-size: var(--small-size); color: var(--text-secondary); line-height: 1.4; font-weight: 300; }
+
+/* ===========================================
+   ETIQUETTE STEPS
+   =========================================== */
+.step-list { display: flex; flex-direction: column; gap: clamp(0.5rem, 1.2vh, 0.8rem); margin-top: clamp(0.5rem, 1.5vh, 1rem); }
+.step { display: flex; align-items: flex-start; gap: clamp(0.6rem, 1.2vw, 1rem); }
+.step-num { font-family: var(--font-display); font-size: clamp(1.2rem, 2vw, 1.6rem); color: var(--accent-wood); font-weight: 400; flex-shrink: 0; width: clamp(1.5rem, 2.5vw, 2rem); text-align: center; opacity: 0.7; }
+.step-text { font-size: var(--body-size); color: var(--text-secondary); line-height: 1.5; font-weight: 300; }
+.step-text strong { color: var(--text-primary); font-weight: 500; }
+
+/* ===========================================
+   CLOSING SLIDE
+   =========================================== */
+.closing-slide {
+    text-align: center; align-items: center;
+    background: radial-gradient(ellipse at 50% 50%, rgba(90, 122, 82, 0.1) 0%, transparent 60%),
+        linear-gradient(170deg, var(--bg-mist) 0%, var(--bg-primary) 50%, var(--bg-deep) 100%);
+}
+.closing-slide .slide-content { align-items: center; }
+
+/* ===========================================
+   EDIT MODE
+   =========================================== */
+.edit-hotzone { position: fixed; top: 0; left: 0; width: 80px; height: 80px; z-index: 10000; cursor: pointer; }
+.edit-toggle { position: fixed; top: clamp(0.5rem, 1.5vh, 1rem); left: clamp(0.5rem, 1.5vw, 1rem); background: rgba(90, 122, 82, 0.2); border: 1px solid rgba(90, 122, 82, 0.3); color: var(--text-primary); font-size: clamp(0.8rem, 1.2vw, 1rem); padding: clamp(0.3rem, 0.6vw, 0.5rem) clamp(0.5rem, 1vw, 0.8rem); border-radius: 6px; cursor: pointer; z-index: 10001; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+.edit-toggle.show, .edit-toggle.active { opacity: 1; pointer-events: auto; }
+.edit-banner { position: fixed; top: 0; left: 0; right: 0; background: rgba(90, 122, 82, 0.15); border-bottom: 1px solid rgba(90, 122, 82, 0.2); color: var(--text-secondary); font-family: var(--font-body); font-size: var(--small-size); text-align: center; padding: clamp(0.2rem, 0.5vh, 0.4rem); z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+.edit-banner.active { opacity: 1; pointer-events: auto; }
+body.edit-active [contenteditable] { outline: 1px dashed rgba(196, 149, 106, 0.3); outline-offset: 4px; cursor: text; }
+body.edit-active [contenteditable]:focus { outline-color: var(--accent-wood); }
+</style>
+</head>
+<body>
+
+<!-- UI Controls -->
+<div class="progress-bar" id="progressBar"></div>
+<nav class="nav-dots" id="navDots" aria-label="Slide navigation"></nav>
+<div class="edit-hotzone" id="editHotzone"></div>
+<button class="edit-toggle" id="editToggle" title="Edit mode (E)">&#9998; Edit</button>
+<div class="edit-banner" id="editBanner">Edit Mode — Click any text to edit &middot; Ctrl+S to save</div>
+
+<!-- Modal Overlay -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content" id="modalContent">
+        <button class="modal-close" id="modalClose">&times;</button>
+        <div id="modalBody"></div>
+    </div>
+</div>
+
+<!-- ===========================================
+     SLIDE 1: TITLE — Photo background + mountains
+     =========================================== -->
+<section class="slide" aria-label="Title" style="justify-content: center; align-items: flex-start;">
+    <div class="photo-bg" style="background-image: url('https://static.gltjp.com/glt/data/article/22000/21176/20251027_174045_3b6ca0ef_w1920.webp');"></div>
+    <div class="slide-accent" style="z-index:2;"></div>
+    <div class="steam-container" style="right: clamp(3rem, 8vw, 8rem); bottom: clamp(3rem, 8vh, 6rem); width: clamp(80px, 12vw, 150px); height: clamp(120px, 25vh, 250px);">
+        <div class="steam-puff"></div>
+        <div class="steam-puff"></div>
+        <div class="steam-puff"></div>
+    </div>
+    <div class="slide-content" style="padding-left: clamp(4rem, 10vw, 12rem); z-index: 2;">
+        <div class="jp-text reveal">黒川温泉 &middot; 熊本県</div>
+        <h1 class="reveal" style="font-size: clamp(2.8rem, 7vw, 5.5rem);">Kurokawa<br><em>Onsen</em></h1>
+        <div class="diamond reveal"></div>
+        <p class="reveal" style="font-size: var(--subtitle-size); color: var(--text-secondary); font-weight: 300; letter-spacing: 0.08em; margin-top: clamp(0.8rem, 2vh, 1.5rem);">A journey into Japan's hidden hot spring village</p>
+    </div>
+    <div class="css-mountains">
+        <div class="mountain-layer mountain-layer-1"></div>
+        <div class="mountain-layer mountain-layer-2"></div>
+        <div class="mountain-layer mountain-layer-3"></div>
+    </div>
+</section>
+
+<!-- ===========================================
+     SLIDE 2: OVERVIEW — Street photo panel
+     =========================================== -->
+<section class="slide" aria-label="Overview">
+    <div class="photo-panel" style="background-image: url('https://static.gltjp.com/glt/data/article/22000/21176/20251027_095742_2fa785bb_w1920.webp');"></div>
+    <div class="slide-accent"></div>
+    <div class="slide-content" style="padding-left: clamp(4rem, 10vw, 12rem); padding-right: clamp(3rem, 8vw, 10rem); gap: var(--content-gap); z-index:1;">
+        <div class="section-label reveal">Overview</div>
+        <h2 class="reveal">One Village, <em>One Ryokan</em></h2>
+        <p class="body-text reveal" style="margin-top: clamp(0.3rem, 1vh, 0.6rem);">
+            Nestled in a mountain gorge in Kumamoto Prefecture, Kurokawa Onsen embodies a rare philosophy: the entire village operates as a single ryokan. Thirty inns share their waters, creating unified hospitality.
+        </p>
+        <p class="body-text reveal">
+            Free of concrete hotels and neon signs, the townscape is defined by wooden buildings, earthen walls, stone stairs, and the Tanoharu River. Recognized in the 2009 Michelin Green Guide.
+        </p>
+        <div class="highlight-box reveal">
+            <p><strong>300+ years of history</strong> — from Edo-period rest stop for feudal lords to one of Japan's most beloved onsen destinations.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ===========================================
+     SLIDE 3: GETTING THERE — with map link
+     =========================================== -->
+<section class="slide" aria-label="Getting There">
+    <div class="slide-accent"></div>
+    <div class="slide-content" style="padding-left: clamp(4rem, 10vw, 12rem); padding-right: clamp(3rem, 8vw, 10rem); gap: var(--content-gap); z-index:1;">
+        <div class="section-label reveal">Access</div>
+        <h2 class="reveal">Getting <em>There</em></h2>
+        <p class="body-text reveal">Located 20km north of Mount Aso in central Kyushu. <a href="https://maps.google.com/?q=Kurokawa+Onsen,+Minamioguni,+Kumamoto" target="_blank" rel="noopener" style="color: var(--accent-wood); text-decoration: underline; text-underline-offset: 3px;">View on Google Maps &rarr;</a></p>
+        <div class="feature-grid reveal">
+            <div class="feature-card" onclick="openModal('fukuoka')">
+                <span class="card-icon">&#9992;</span>
+                <h3>From Fukuoka</h3>
+                <p>Direct bus ~2.5 hours, 3 daily departures. &yen;3,470 one way.</p>
+                <span class="card-hint">Click for details</span>
+            </div>
+            <div class="feature-card" onclick="openModal('kumamoto')">
+                <span class="card-icon">&#128644;</span>
+                <h3>From Kumamoto</h3>
+                <p>Highway bus ~3 hours. Also ~1.5 hours by rental car.</p>
+                <span class="card-hint">Click for details</span>
+            </div>
+            <div class="feature-card" onclick="openModal('beppu')">
+                <span class="card-icon">&#9832;</span>
+                <h3>From Beppu</h3>
+                <p>One daily bus via Yufuin, ~2.5 hours. Book ahead.</p>
+                <span class="card-hint">Click for details</span>
+            </div>
+        </div>
+        <div class="highlight-box reveal" style="margin-top: clamp(0.3rem, 0.8vh, 0.5rem);">
+            <p><strong>Tip:</strong> Book bus tickets 30 days ahead via <a href="https://www.highwaybus.com/" target="_blank" rel="noopener" style="color: var(--accent-wood);">Kyushu Highway Bus</a>. Bring cash — no ATMs in town.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ===========================================
+     SLIDE 4: ONSEN EXPERIENCE — Tegata photo
+     =========================================== -->
+<section class="slide" aria-label="Onsen Experience">
+    <div class="photo-panel" style="background-image: url('https://static.gltjp.com/glt/data/article/22000/21176/20251027_095800_56904262_w1920.webp');"></div>
+    <div class="slide-accent"></div>
+    <div class="slide-content" style="padding-left: clamp(4rem, 10vw, 12rem); padding-right: clamp(3rem, 8vw, 10rem); gap: var(--content-gap); z-index:1;">
+        <div class="section-label reveal">Experience</div>
+        <h2 class="reveal">The Art of <em>Onsen Hopping</em></h2>
+        <p class="body-text reveal">Kurokawa's signature: strolling between outdoor baths in yukata and wooden geta sandals.</p>
+        <div class="two-col reveal">
+            <div>
+                <h3 style="color: var(--accent-wood); margin-bottom: clamp(0.3rem, 0.8vh, 0.5rem);">
+                    <span class="has-tooltip">Nyuto Tegata<span class="tooltip-text">Wooden medallion bathing pass — a keepsake!</span></span> Pass
+                </h3>
+                <div class="info-list">
+                    <div class="info-item"><span class="info-icon">&#9679;</span><span class="info-text"><strong>&yen;1,500</strong> wooden medallion pass</span></div>
+                    <div class="info-item"><span class="info-icon">&#9679;</span><span class="info-text">Access to <strong>3 ryokan baths</strong> of your choice</span></div>
+                    <div class="info-item"><span class="info-icon">&#9679;</span><span class="info-text">Third sticker tradeable for <strong>drinks/souvenirs</strong></span></div>
+                    <div class="info-item"><span class="info-icon">&#9679;</span><span class="info-text">Valid for <strong>6 months</strong> — beautiful keepsake</span></div>
+                </div>
+            </div>
+            <div>
+                <h3 style="color: var(--accent-wood); margin-bottom: clamp(0.3rem, 0.8vh, 0.5rem);">Seven Spring Types</h3>
+                <div class="info-list">
+                    <div class="info-item"><span class="info-icon">&#9679;</span><span class="info-text">Sulfur — mineral-rich, milky white</span></div>
+                    <div class="info-item"><span class="info-icon">&#9679;</span><span class="info-text">Chloride — warming, smooth on skin</span></div>
+                    <div class="info-item"><span class="info-icon">&#9679;</span><span class="info-text">Acidic — detoxifying properties</span></div>
+                    <div class="info-item"><span class="info-icon">&#9679;</span><span class="info-text">Each ryokan has its own unique source</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===========================================
+     SLIDE 5: BATHHOUSES — Interactive cards
+     =========================================== -->
+<section class="slide" aria-label="Bathhouses">
+    <div class="slide-accent"></div>
+    <div class="slide-content" style="padding-left: clamp(4rem, 10vw, 12rem); padding-right: clamp(3rem, 8vw, 10rem); gap: var(--content-gap); z-index:1;">
+        <div class="section-label reveal">Bathhouses</div>
+        <h2 class="reveal">Must-Visit <em>Baths</em></h2>
+        <div class="feature-grid reveal" style="margin-top: clamp(0.3rem, 1vh, 0.5rem);">
+            <div class="feature-card" onclick="openModal('yamamizuki')">
+                <h3>Yamamizuki</h3>
+                <p>One of Japan's finest riverside baths. Forest-surrounded outdoor pools. &yen;600</p>
+                <span class="card-hint">Click for details &rarr;</span>
+            </div>
+            <div class="feature-card" onclick="openModal('shinmeikan')">
+                <h3>Shinmeikan</h3>
+                <p>120-year old ryokan with a dramatic cave bath carved into rock.</p>
+                <span class="card-hint">Click for details &rarr;</span>
+            </div>
+            <div class="feature-card" onclick="openModal('ikoi')">
+                <h3>Ikoi</h3>
+                <p>60 years old. 13 baths. The only "100 Famous Hot Springs" standing bath.</p>
+                <span class="card-hint">Click for details &rarr;</span>
+            </div>
+            <div class="feature-card" onclick="openModal('okunoyu')">
+                <h3>Okunoyu</h3>
+                <p>Nine bathing options: river, cave, outdoor. Mixed-gender available. &yen;700</p>
+                <span class="card-hint">Click for details &rarr;</span>
+            </div>
+            <div class="feature-card" onclick="openModal('kurokawaso')">
+                <h3>Kurokawaso</h3>
+                <p>Huge outdoor bath surrounded by ancient trees. Deep forest atmosphere.</p>
+                <span class="card-hint">Click for details &rarr;</span>
+            </div>
+            <div class="feature-card" onclick="openModal('publicbaths')">
+                <h3>Public Baths</h3>
+                <p>Jizoyu &amp; Anayu — simple, authentic public baths at just &yen;200 each.</p>
+                <span class="card-hint">Click for details &rarr;</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===========================================
+     SLIDE 6: WHERE TO STAY — Photo + cards
+     =========================================== -->
+<section class="slide" aria-label="Accommodation">
+    <div class="photo-panel" style="background-image: url('https://static.gltjp.com/glt/data/article/22000/21176/20251027_095922_394f9237_w1920.webp');"></div>
+    <div class="slide-accent"></div>
+    <div class="slide-content" style="padding-left: clamp(4rem, 10vw, 12rem); padding-right: clamp(3rem, 8vw, 10rem); gap: var(--content-gap); z-index:1;">
+        <div class="section-label reveal">Stay</div>
+        <h2 class="reveal">Where to <em>Stay</em></h2>
+        <p class="body-text reveal">All 30 accommodations are traditional ryokan. Stays include kaiseki dinner, breakfast, and baths.</p>
+        <div class="feature-grid reveal">
+            <div class="feature-card" onclick="openModal('ryokan-luxury')">
+                <span class="card-icon" style="color: var(--accent-wood);">&#9733;</span>
+                <h3>Luxury</h3>
+                <p><strong>Gosho Gekkoju</strong> — Private villas with custom onsen. Ultra-premium.</p>
+                <span class="card-hint">Click for details &rarr;</span>
+            </div>
+            <div class="feature-card" onclick="openModal('ryokan-mid')">
+                <span class="card-icon" style="color: var(--accent-moss);">&#9733;</span>
+                <h3>Mid-Range</h3>
+                <p><strong>Shinmeikan / Fumoto</strong> — Cave baths, 15 tubs. From ~&yen;22,000/night.</p>
+                <span class="card-hint">Click for details &rarr;</span>
+            </div>
+            <div class="feature-card" onclick="openModal('ryokan-budget')">
+                <span class="card-icon" style="color: var(--text-secondary);">&#9733;</span>
+                <h3>Budget</h3>
+                <p><strong>Container House Villa</strong> — Modern rooms with private onsen.</p>
+                <span class="card-hint">Click for details &rarr;</span>
+            </div>
+        </div>
+        <div class="highlight-box reveal"><p><strong>One night</strong> is enough, but <strong>two nights</strong> recommended for full disconnection.</p></div>
+    </div>
+</section>
+
+<!-- ===========================================
+     SLIDE 7: FOOD — Interactive restaurant cards
+     =========================================== -->
+<section class="slide" aria-label="Food">
+    <div class="photo-panel" style="background-image: url('https://static.gltjp.com/glt/data/article/22000/21176/20251027_095939_f676460e_w1920.webp');"></div>
+    <div class="slide-accent"></div>
+    <div class="slide-content" style="padding-left: clamp(4rem, 10vw, 12rem); padding-right: clamp(3rem, 8vw, 10rem); gap: var(--content-gap); z-index:1;">
+        <div class="section-label reveal">Dining</div>
+        <h2 class="reveal">Food & <em>Flavors</em></h2>
+        <p class="body-text reveal">Kumamoto's famous <span class="has-tooltip">basashi<span class="tooltip-text">Horse meat sashimi — a regional delicacy</span></span> and premium Aso <span class="has-tooltip">akaushi<span class="tooltip-text">Japanese red cattle — prized Kumamoto beef breed</span></span> beef alongside mountain cuisine.</p>
+        <div class="two-col reveal">
+            <div>
+                <h3 style="color: var(--accent-wood); margin-bottom: clamp(0.3rem, 0.8vh, 0.5rem);">Restaurants</h3>
+                <div class="info-list">
+                    <div class="info-item" style="cursor:pointer" onclick="openModal('warokuya')"><span class="info-icon">&#9679;</span><span class="info-text"><strong>Warokuya</strong> — Meiji-era building. Akaushi beef bowls. ~&yen;1,500 <span style="color:var(--accent-wood);font-size:0.75em">&rarr;</span></span></div>
+                    <div class="info-item" style="cursor:pointer" onclick="openModal('kissho')"><span class="info-icon">&#9679;</span><span class="info-text"><strong>Tofu Kissho</strong> — Century-old tofu specialist. Healthy set meals <span style="color:var(--accent-wood);font-size:0.75em">&rarr;</span></span></div>
+                    <div class="info-item" style="cursor:pointer" onclick="openModal('iromomiji')"><span class="info-icon">&#9679;</span><span class="info-text"><strong>Iromomiji</strong> — Handmade soba, basashi, Aso beef. Lunch only <span style="color:var(--accent-wood);font-size:0.75em">&rarr;</span></span></div>
+                    <div class="info-item" style="cursor:pointer" onclick="openModal('ufufu')"><span class="info-icon">&#9679;</span><span class="info-text"><strong>Ufufu</strong> — Yakiniku & yakitori. ~&yen;2,000 with drinks <span style="color:var(--accent-wood);font-size:0.75em">&rarr;</span></span></div>
+                </div>
+            </div>
+            <div>
+                <h3 style="color: var(--accent-wood); margin-bottom: clamp(0.3rem, 0.8vh, 0.5rem);">Snacks & Drinks</h3>
+                <div class="info-list">
+                    <div class="info-item" style="cursor:pointer" onclick="openModal('roku')"><span class="info-icon">&#9679;</span><span class="info-text"><strong>Patisserie Roku</strong> — Famous softball-sized cream puffs. &yen;220 <span style="color:var(--accent-wood);font-size:0.75em">&rarr;</span></span></div>
+                    <div class="info-item"><span class="info-icon">&#9679;</span><span class="info-text"><strong>Dora Dora</strong> — Warm dorayaki pancakes, fresh off the griddle</span></div>
+                    <div class="info-item"><span class="info-icon">&#9679;</span><span class="info-text"><strong>Terakoya</strong> — Hand-grilled rice crackers with local flavors</span></div>
+                    <div class="info-item"><span class="info-icon">&#9679;</span><span class="info-text"><strong>Bar-hopping pass</strong> — Sake & shochu at 3 spots across town</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===========================================
+     SLIDE 8: SEASONS — Photo + sakura + season cards
+     =========================================== -->
+<section class="slide" aria-label="Seasons">
+    <div class="photo-panel" style="background-image: url('https://static.gltjp.com/glt/data/article/22000/21176/20251027_095748_95f1723b_w1920.webp');"></div>
+    <div class="slide-accent"></div>
+    <div class="sakura-container">
+        <div class="sakura-petal"></div><div class="sakura-petal"></div><div class="sakura-petal"></div>
+        <div class="sakura-petal"></div><div class="sakura-petal"></div><div class="sakura-petal"></div>
+    </div>
+    <div class="slide-content" style="padding-left: clamp(4rem, 10vw, 12rem); padding-right: clamp(3rem, 8vw, 10rem); gap: var(--content-gap); z-index:1;">
+        <div class="section-label reveal">Seasons</div>
+        <h2 class="reveal">Every Season, <em>A New Face</em></h2>
+        <div class="season-grid reveal">
+            <div class="season-card" style="background: rgba(255, 183, 197, 0.06);" onclick="openModal('spring')">
+                <div class="season-icon">&#127800;</div>
+                <h3>Spring</h3>
+                <p>Cherry blossoms frame the river. Fresh mountain greenery. Mild and perfect.</p>
+            </div>
+            <div class="season-card" style="background: rgba(90, 160, 90, 0.06);" onclick="openModal('summer')">
+                <div class="season-icon">&#127807;</div>
+                <h3>Summer</h3>
+                <p>Lush green canopy. Cool mountain escape. Fireflies dance at dusk.</p>
+            </div>
+            <div class="season-card" style="background: rgba(210, 140, 50, 0.06);" onclick="openModal('autumn')">
+                <div class="season-icon">&#127809;</div>
+                <h3>Autumn</h3>
+                <p>Peak season. Vivid maples paint the gorge. Late Oct to mid-Nov.</p>
+            </div>
+            <div class="season-card" style="background: rgba(180, 200, 220, 0.06);" onclick="openModal('winter')">
+                <div class="season-icon">&#10052;</div>
+                <h3>Winter</h3>
+                <p>Ultimate onsen season. Snow-covered rooftops and Yu Akari lanterns.</p>
+            </div>
+        </div>
+        <div class="highlight-box reveal"><p><strong>Best time:</strong> Late autumn through winter (November — February) for peak atmosphere.</p></div>
+    </div>
+</section>
+
+<!-- ===========================================
+     SLIDE 9: YU AKARI — Illumination photo + lanterns
+     =========================================== -->
+<section class="slide" aria-label="Yu Akari">
+    <div class="photo-bg" style="background-image: url('https://static.gltjp.com/glt/data/article/22000/21176/20251027_095807_6abe6574_w1920.webp');"></div>
+    <div class="slide-accent" style="z-index:2;"></div>
+    <div class="lantern-row" style="z-index:1;">
+        <div class="css-lantern"></div><div class="css-lantern"></div><div class="css-lantern"></div>
+        <div class="css-lantern"></div><div class="css-lantern"></div>
+    </div>
+    <div class="slide-content" style="padding-left: clamp(4rem, 10vw, 12rem); padding-right: clamp(3rem, 8vw, 10rem); gap: var(--content-gap); z-index:2;">
+        <div class="section-label reveal">Winter Magic</div>
+        <h2 class="reveal">Yu Akari <em>Illumination</em></h2>
+        <p class="body-text reveal">Mid-December through late March. Hundreds of handmade bamboo lanterns glow from sunset until 10 PM.</p>
+        <div class="two-col reveal">
+            <div>
+                <div class="info-list">
+                    <div class="info-item"><span class="info-icon">&#9679;</span><span class="info-text"><strong>300+ <span class="has-tooltip">Mari Toro<span class="tooltip-text">Spherical lanterns with star-shaped cutouts</span></span></strong> floating over the river</span></div>
+                    <div class="info-item"><span class="info-icon">&#9679;</span><span class="info-text"><strong>2-meter <span class="has-tooltip">Tsutsu Toro<span class="tooltip-text">Tall cylindrical lanterns carved with flowers</span></span></strong> lining the streets</span></div>
+                    <div class="info-item"><span class="info-icon">&#9679;</span><span class="info-text"><strong>All handmade</strong> by local artisans from forest bamboo</span></div>
+                </div>
+            </div>
+            <div>
+                <div class="info-list">
+                    <div class="info-item"><span class="info-icon">&#9679;</span><span class="info-text">Amber light reflects on water and snow</span></div>
+                    <div class="info-item"><span class="info-icon">&#9679;</span><span class="info-text">Best viewed from <strong><span class="has-tooltip">Marusuzubashi Bridge<span class="tooltip-text">15.4m wooden bridge — symbol of Kurokawa</span></span></strong></span></div>
+                    <div class="info-item"><span class="info-icon">&#9679;</span><span class="info-text">Free to experience. Dress warmly.</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===========================================
+     SLIDE 10: NEARBY ATTRACTIONS — with links
+     =========================================== -->
+<section class="slide" aria-label="Nearby">
+    <div class="photo-panel" style="background-image: url('https://static.gltjp.com/glt/data/article/22000/21176/20251027_095955_fd071630_w1920.webp');"></div>
+    <div class="slide-accent"></div>
+    <div class="slide-content" style="padding-left: clamp(4rem, 10vw, 12rem); padding-right: clamp(3rem, 8vw, 10rem); gap: var(--content-gap); z-index:1;">
+        <div class="section-label reveal">Explore</div>
+        <h2 class="reveal">Beyond the <em>Village</em></h2>
+        <div class="feature-grid reveal">
+            <div class="feature-card" onclick="openModal('aso')">
+                <span class="card-icon">&#127755;</span>
+                <h3>Mount Aso</h3>
+                <p>Japan's largest active volcano. Cable car to crater with turquoise lagoon.</p>
+                <span class="card-hint">Click for details &rarr;</span>
+            </div>
+            <div class="feature-card" onclick="openModal('seiryu')">
+                <span class="card-icon">&#127795;</span>
+                <h3>Seiryu no Mori</h3>
+                <p>80-hectare forest park. 8 themed zones. Spectacular autumn foliage.</p>
+                <span class="card-hint">Click for details &rarr;</span>
+            </div>
+            <div class="feature-card" onclick="openModal('mazeno')">
+                <span class="card-icon">&#127754;</span>
+                <h3>Mazeno Gorge</h3>
+                <p>"Secret Gorge" — open only spring & autumn. Waterfalls & wilderness.</p>
+                <span class="card-hint">Click for details &rarr;</span>
+            </div>
+            <div class="feature-card" onclick="openModal('senomoto')">
+                <span class="card-icon">&#9968;</span>
+                <h3>Senomoto Plateau</h3>
+                <p>850-900m. 360-degree panorama ranked #1 in Kumamoto scenery.</p>
+                <span class="card-hint">Click for details &rarr;</span>
+            </div>
+            <div class="feature-card" onclick="openModal('meoto')">
+                <span class="card-icon">&#128166;</span>
+                <h3>Meoto Falls</h3>
+                <p>Twin waterfalls (15m & 12m) — the "Matchmaking Waterfall."</p>
+                <span class="card-hint">Click for details &rarr;</span>
+            </div>
+            <div class="feature-card" onclick="openModal('jizodo')">
+                <span class="card-icon">&#9961;</span>
+                <h3>Jizodo Shrine</h3>
+                <p>Birthplace of Kurokawa Onsen. Sacred spot since early Showa period.</p>
+                <span class="card-hint">Click for details &rarr;</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===========================================
+     SLIDE 11: ETIQUETTE — Rotenburo photo
+     =========================================== -->
+<section class="slide" aria-label="Etiquette">
+    <div class="photo-panel" style="background-image: url('https://static.gltjp.com/glt/data/article/22000/21176/20251027_095754_21f937d7_w1920.webp');"></div>
+    <div class="slide-accent"></div>
+    <div class="slide-content" style="padding-left: clamp(4rem, 10vw, 12rem); padding-right: clamp(3rem, 8vw, 10rem); gap: var(--content-gap); z-index:1;">
+        <div class="section-label reveal">Etiquette</div>
+        <h2 class="reveal">Bathing <em>Manners</em></h2>
+        <p class="body-text reveal">Centuries-old customs. Respect these and you'll be welcomed warmly.</p>
+        <div class="step-list reveal">
+            <div class="step"><span class="step-num">1</span><span class="step-text"><strong>Undress completely</strong> — No swimsuits, clothing, or jewelry. Leave everything in the changing room.</span></div>
+            <div class="step"><span class="step-num">2</span><span class="step-text"><strong>Wash thoroughly first</strong> — Sit on the small stools. Rinse completely before entering the bath.</span></div>
+            <div class="step"><span class="step-num">3</span><span class="step-text"><strong>Keep your towel dry</strong> — Never let it touch the water. Balance it on your head or set aside.</span></div>
+            <div class="step"><span class="step-num">4</span><span class="step-text"><strong>Enter slowly, stay quiet</strong> — No splashing, no loud voices. The onsen is a place of calm.</span></div>
+            <div class="step"><span class="step-num">5</span><span class="step-text"><strong>Tattoo policy</strong> — Many ryokan restrict tattoos. Check ahead — some offer cover-ups or private baths.</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- ===========================================
+     SLIDE 12: PRACTICAL TIPS
+     =========================================== -->
+<section class="slide" aria-label="Tips">
+    <div class="slide-accent"></div>
+    <div class="slide-content" style="padding-left: clamp(4rem, 10vw, 12rem); padding-right: clamp(3rem, 8vw, 10rem); gap: var(--content-gap); z-index:1;">
+        <div class="section-label reveal">Essentials</div>
+        <h2 class="reveal">Practical <em>Tips</em></h2>
+        <div class="two-col reveal" style="margin-top: clamp(0.5rem, 1.5vh, 1rem);">
+            <div>
+                <h3 style="color: var(--accent-wood); margin-bottom: clamp(0.3rem, 0.8vh, 0.5rem);">What to Bring</h3>
+                <div class="info-list">
+                    <div class="info-item"><span class="info-icon">&#9679;</span><span class="info-text"><strong>Cash</strong> — No ATMs in town. Bring sufficient yen.</span></div>
+                    <div class="info-item"><span class="info-icon">&#9679;</span><span class="info-text"><strong>Small towel</strong> — Useful for spontaneous bath-hopping.</span></div>
+                    <div class="info-item"><span class="info-icon">&#9679;</span><span class="info-text"><strong>Pocket WiFi</strong> — Limited connectivity. Embrace the disconnect.</span></div>
+                    <div class="info-item"><span class="info-icon">&#9679;</span><span class="info-text"><strong>Warm layers</strong> — For strolling between baths in cold air.</span></div>
+                </div>
+            </div>
+            <div>
+                <h3 style="color: var(--accent-wood); margin-bottom: clamp(0.3rem, 0.8vh, 0.5rem);">Good to Know</h3>
+                <div class="info-list">
+                    <div class="info-item"><span class="info-icon">&#9679;</span><span class="info-text"><strong>Dine early</strong> — Restaurants close by 6 PM. Ryokan dinner is the main event.</span></div>
+                    <div class="info-item"><span class="info-icon">&#9679;</span><span class="info-text"><strong>Start baths at noon</strong> — Before check-ins for quieter soaking.</span></div>
+                    <div class="info-item"><span class="info-icon">&#9679;</span><span class="info-text"><strong>English maps</strong> at the <a href="https://www.kurokawaonsen.or.jp/eng_new/" target="_blank" rel="noopener" style="color: var(--accent-wood);">info center</a>.</span></div>
+                    <div class="info-item"><span class="info-icon">&#9679;</span><span class="info-text"><strong>No convenience stores</strong> — Unplugged. Part of the charm.</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===========================================
+     SLIDE 13: CLOSING — Mountains + lanterns
+     =========================================== -->
+<section class="slide closing-slide" aria-label="Closing">
+    <div class="photo-bg" style="background-image: url('https://static.gltjp.com/glt/data/article/22000/21176/20251027_095813_d22d00de_w1920.webp'); opacity: 0.3;"></div>
+    <div class="slide-accent"></div>
+    <div class="lantern-row" style="bottom: auto; top: clamp(1rem, 3vh, 2rem);">
+        <div class="css-lantern"></div><div class="css-lantern"></div><div class="css-lantern"></div>
+        <div class="css-lantern"></div><div class="css-lantern"></div>
+    </div>
+    <div class="slide-content" style="z-index:1;">
+        <div class="jp-text reveal" style="margin-bottom: clamp(0.5rem, 1.5vh, 1rem);">いい湯だな</div>
+        <h2 class="reveal" style="font-size: clamp(2rem, 5vw, 4rem);">Let the Mountains <em>Heal You</em></h2>
+        <div class="rule reveal" style="margin: clamp(0.8rem, 2vh, 1.5rem) auto;"></div>
+        <p class="body-text reveal" style="text-align: center; max-width: 500px;">
+            Kurokawa Onsen isn't a destination you visit.<br>It's a pace of life you surrender to.
+        </p>
+        <div class="reveal" style="margin-top: clamp(1rem, 2.5vh, 2rem); display: flex; gap: clamp(0.5rem, 1vw, 0.8rem); flex-wrap: wrap; justify-content: center;">
+            <a href="https://www.kurokawaonsen.or.jp/eng_new/" target="_blank" rel="noopener" class="modal-link">Official Website &rarr;</a>
+            <a href="https://maps.google.com/?q=Kurokawa+Onsen,+Minamioguni,+Kumamoto" target="_blank" rel="noopener" class="modal-link">Google Maps &rarr;</a>
+            <a href="https://www.japan-guide.com/e/e4575.html" target="_blank" rel="noopener" class="modal-link">Japan Guide &rarr;</a>
+        </div>
+        <div class="diamond reveal" style="margin: clamp(1rem, 2.5vh, 2rem) auto 0;"></div>
+        <p class="reveal" style="font-size: var(--small-size); color: var(--text-muted); margin-top: clamp(0.5rem, 1.5vh, 1rem); text-align: center;">
+            黒川温泉 &middot; Minamioguni, Aso District, Kumamoto Prefecture
+        </p>
+    </div>
+    <div class="css-mountains">
+        <div class="mountain-layer mountain-layer-1"></div>
+        <div class="mountain-layer mountain-layer-2"></div>
+        <div class="mountain-layer mountain-layer-3"></div>
+    </div>
+</section>
+
+<!-- ===========================================
+     JAVASCRIPT
+     =========================================== -->
+<script>
+/* ===========================================
+   MODAL DATA — all detailed info for clickable cards
+   =========================================== */
+const MODAL_DATA = {
+    /* --- Transport --- */
+    fukuoka: {
+        title: 'From Fukuoka', subtitle: 'Highway Bus',
+        body: `<p><strong>Route:</strong> Hakata Station / Tenjin Bus Center / Fukuoka Airport &rarr; Kurokawa Onsen</p>
+<p><strong>Duration:</strong> ~2.5&ndash;3 hours</p>
+<p><strong>Departures:</strong> 3 daily (10:13am, 11:58am, 1:23pm approx.)</p>
+<p><strong>Cost:</strong> &yen;3,470 one way (covered by Sun Q Pass)</p>
+<p><strong>Booking:</strong> Reserve at least 1 day ahead &mdash; buses often sell out. Available via Kyushu Highway Bus or Japan Bus Online (up to 30 days in advance).</p>
+<p><strong>By car:</strong> ~2 hours via expressway. Rental cars available at Fukuoka Airport.</p>`,
+        links: [
+            { label: 'Kyushu Highway Bus', url: 'https://www.highwaybus.com/' },
+            { label: 'Google Maps Route', url: 'https://maps.google.com/maps/dir/Hakata+Station,+Fukuoka/Kurokawa+Onsen,+Kumamoto/' }
+        ]
+    },
+    kumamoto: {
+        title: 'From Kumamoto', subtitle: 'Highway Bus or Car',
+        body: `<p><strong>Bus:</strong> 3 daily departures from Kumamoto Station. ~3 hours.</p>
+<p><strong>By car:</strong> ~1.5 hours via Kumamoto IC on Kyushu Expressway. The most flexible option.</p>
+<p><strong>Via Aso:</strong> Consider stopping at Mount Aso on the way &mdash; it's on the route and worth a half-day detour.</p>`,
+        links: [
+            { label: 'Google Maps Route', url: 'https://maps.google.com/maps/dir/Kumamoto+Station/Kurokawa+Onsen,+Kumamoto/' }
+        ]
+    },
+    beppu: {
+        title: 'From Beppu / Yufuin', subtitle: 'Limited Bus Service',
+        body: `<p><strong>From Beppu:</strong> 1 daily bus at 8am via Yufuin. ~2.5&ndash;3 hours.</p>
+<p><strong>From Yufuin:</strong> 3 daily buses (9am, 1:50pm, 2:50pm). ~90 minutes.</p>
+<p><strong>Important:</strong> These routes sell out quickly. Book at least 1 day ahead.</p>
+<p>Consider combining Yufuin and Kurokawa Onsen in a 3&ndash;4 day Kyushu onsen itinerary.</p>`,
+        links: [
+            { label: 'Google Maps Route', url: 'https://maps.google.com/maps/dir/Beppu+Station/Kurokawa+Onsen,+Kumamoto/' }
+        ]
+    },
+
+    /* --- Bathhouses --- */
+    yamamizuki: {
+        title: 'Yamamizuki', subtitle: 'Riverside Open-Air Bath',
+        photo: 'https://static.gltjp.com/glt/data/article/22000/21176/20251027_095854_3014036c_w1920.webp',
+        body: `<p>Widely regarded as having one of the <strong>finest riverside baths in all of Japan</strong>. The forest-surrounded outdoor pools offer postcard-quality views with the sound of rushing water below.</p>
+<p><strong>Day visit:</strong> &yen;600</p>
+<p><strong>Overnight:</strong> From &yen;21,000/person</p>
+<p><strong>Tip:</strong> Located ~1km from town center. Visit midday (before 2pm) for the quietest experience. The ryokan may offer a free shuttle &mdash; call ahead.</p>`,
+        links: [
+            { label: 'View on Map', url: 'https://maps.google.com/?q=Yamamizuki+Kurokawa+Onsen' },
+            { label: 'Official Site', url: 'https://www.yamamizuki.com/' }
+        ]
+    },
+    shinmeikan: {
+        title: 'Shinmeikan', subtitle: '120-Year-Old Cave Bath Ryokan',
+        photo: 'https://static.gltjp.com/glt/data/article/22000/21176/20251027_095932_6bf9586d_w1920.webp',
+        body: `<p>A 120-year-old ryokan with old-world charm and atmospheric appeal. The star attraction is a <strong>dramatic cave bath carved into natural rock</strong> &mdash; often compared to the bathhouse in Studio Ghibli's <em>Spirited Away</em>.</p>
+<p><strong>Day visit:</strong> &yen;500</p>
+<p><strong>Tip:</strong> Visit in the evening when lanterns illuminate the riverside setting. The cave bath is genuinely magical after dark.</p>`,
+        links: [
+            { label: 'View on Map', url: 'https://maps.google.com/?q=Shinmeikan+Kurokawa+Onsen' },
+            { label: 'Official Site', url: 'https://www.shinmeikan.jp/en/' }
+        ]
+    },
+    ikoi: {
+        title: 'Ikoi Ryokan', subtitle: "Japan's 100 Famous Hot Springs",
+        photo: 'https://static.gltjp.com/glt/data/article/22000/21176/20251027_095909_8b0a467d_w1920.webp',
+        body: `<p>A 60-year-old establishment with <strong>13 natural free-flowing baths</strong>. Home to the only bath in Kurokawa Onsen selected for "Japan's 100 Famous Hot Springs &amp; Hidden Hot Springs."</p>
+<p>Features a unique <strong>standing bath (Taki no Yu)</strong> where you hold suspended bamboo poles for support while soaking in waist-deep water beneath a waterfall.</p>
+<p><strong>Mixed-gender facilities</strong> available at select times.</p>`,
+        links: [
+            { label: 'View on Map', url: 'https://maps.google.com/?q=Ikoi+Ryokan+Kurokawa+Onsen' }
+        ]
+    },
+    okunoyu: {
+        title: 'Okunoyu', subtitle: 'Nine Baths, One Ryokan',
+        body: `<p>The most varied bathing experience in Kurokawa with <strong>nine different options</strong>: river bath, outdoor bath, cave bath, and both gender-separated and mixed-gender indoor baths.</p>
+<p><strong>Day visit:</strong> &yen;700</p>
+<p><strong>Overnight:</strong> From &yen;22,000/person (includes kaiseki dinner, forest terrace rooms)</p>
+<p>Recommended for visitors wanting to try multiple bath styles at a single location.</p>`,
+        links: [
+            { label: 'View on Map', url: 'https://maps.google.com/?q=Okunoyu+Kurokawa+Onsen' }
+        ]
+    },
+    kurokawaso: {
+        title: 'Kurokawaso', subtitle: 'Forest Immersion Bath',
+        body: `<p>Home to one of the <strong>largest outdoor baths</strong> in Kurokawa Onsen, completely surrounded by ancient trees. The feeling of being absorbed into the forest while soaking is unmatched.</p>
+<p><strong>Day visit:</strong> &yen;700</p>
+<p><strong>Overnight:</strong> From &yen;30,000/person</p>`,
+        links: [
+            { label: 'View on Map', url: 'https://maps.google.com/?q=Kurokawaso+Kurokawa+Onsen' }
+        ]
+    },
+    publicbaths: {
+        title: 'Public Baths', subtitle: 'Simple & Authentic',
+        body: `<p>Two unmanned public baths offer the most stripped-back onsen experience in town:</p>
+<p><strong>Jizoyu</strong> &mdash; Located in the town center. Small, steaming, traditional. Just you and the water.</p>
+<p><strong>Anayu</strong> &mdash; Set by the riverside. Slightly more scenic with open views of the river.</p>
+<p><strong>Cost:</strong> Just &yen;200 each. Operated on an honor system &mdash; drop coins in the box.</p>
+<p>These are not luxury experiences, but they are <em>real</em> ones.</p>`,
+        links: [
+            { label: 'View on Map', url: 'https://maps.google.com/?q=Kurokawa+Onsen+Jizoyu' }
+        ]
+    },
+
+    /* --- Ryokan --- */
+    'ryokan-luxury': {
+        title: 'Gosho Gekkoju', subtitle: 'Ultra-Premium Private Villas',
+        photo: 'https://static.gltjp.com/glt/data/article/22000/21176/20251027_095918_c97bcd70_w1920.webp',
+        body: `<p>Eight standalone villas, each with its own <strong>custom-designed private onsen</strong>. Total seclusion in the forest. This is the most exclusive accommodation in Kurokawa.</p>
+<p><strong>Price:</strong> Premium tier (&yen;50,000+/person/night)</p>
+<p><strong>Includes:</strong> Multi-course kaiseki dinner, private bath, complete privacy</p>
+<p><strong>Book well ahead:</strong> Often sold out weeks in advance, especially during autumn and Yu Akari season.</p>`,
+        links: [
+            { label: 'View on Map', url: 'https://maps.google.com/?q=Gosho+Gekkoju+Kurokawa' }
+        ]
+    },
+    'ryokan-mid': {
+        title: 'Mid-Range Ryokan', subtitle: 'Best Value Options',
+        photo: 'https://static.gltjp.com/glt/data/article/22000/21176/20251027_095909_8b0a467d_w1920.webp',
+        body: `<p><strong>Shinmeikan</strong> &mdash; Cave bath, bamboo baths, riverside location. Spirited Away aesthetic. From &yen;22,000.</p>
+<p><strong>Fumoto</strong> &mdash; 15 tubs total, 11 private pools free for guests. Great for bath variety. From &yen;22,000.</p>
+<p><strong>Wakaba</strong> &mdash; Samurai-era aesthetic with straw-covered outdoor bath. Close to hiking trails. Ideal for nature lovers.</p>
+<p><strong>Yusai</strong> &mdash; Modern lobby, rooftop stargazing telescope, buffet breakfast. 50+ rooms with seven direct-flow springs.</p>
+<p>All include kaiseki dinner, breakfast, and bath access.</p>`,
+        links: [
+            { label: 'Search Ryokan', url: 'https://www.booking.com/searchresults.html?ss=Kurokawa+Onsen' }
+        ]
+    },
+    'ryokan-budget': {
+        title: 'Container House Villa', subtitle: 'Modern Budget Option',
+        body: `<p>A refreshingly different take on Kurokawa accommodation. <strong>Modern shipping container rooms</strong> with clean design, comfortable beds, and &mdash; crucially &mdash; <strong>private onsen baths</strong>.</p>
+<p><strong>Price:</strong> Budget tier for Kurokawa (under &yen;15,000/person)</p>
+<p><strong>Self-check-in</strong> system. 12-minute walk from town center.</p>
+<p>No kaiseki dinner included, but the savings let you eat out at local restaurants instead.</p>`,
+        links: [
+            { label: 'View on Map', url: 'https://maps.google.com/?q=Container+House+Villa+Kurokawa+Onsen' }
+        ]
+    },
+
+    /* --- Restaurants --- */
+    warokuya: {
+        title: 'Warokuya', subtitle: 'Meiji-Era Akaushi Beef',
+        photo: 'https://static.gltjp.com/glt/data/article/22000/21176/20251027_095939_f676460e_w1920.webp',
+        body: `<p>Set in a <strong>relocated Meiji-period building</strong> with atmospheric wooden interiors. Known for premium <strong>akaushi (Aso red cattle) beef bowls</strong> prepared with house-grown vegetables.</p>
+<p><strong>Price:</strong> ~&yen;1,500/person</p>
+<p><strong>Hours:</strong> 11am&ndash;4pm (lunch only)</p>
+<p>Also claims to serve "the best fried chicken in the world." Worth testing that claim.</p>`,
+        links: [
+            { label: 'View on Map', url: 'https://maps.google.com/?q=Warokuya+Kurokawa+Onsen' }
+        ]
+    },
+    kissho: {
+        title: 'Tofu Kissho', subtitle: 'Century-Old Tofu Specialist',
+        photo: 'https://static.gltjp.com/glt/data/article/22000/21176/20251027_095943_1cfa0b09_w1920.webp',
+        body: `<p>A tofu specialist using water from the <strong>headwaters of the Chikugo River</strong> and Kumamoto soybeans (Fukuyutaka variety). The tofu set meal features many small, carefully prepared bowls.</p>
+<p><strong>Style:</strong> Healthy, vegetarian-friendly, deeply satisfying</p>
+<p>One of the best options for a lighter meal between baths.</p>`,
+        links: [
+            { label: 'View on Map', url: 'https://maps.google.com/?q=Tofu+Kissho+Kurokawa+Onsen' }
+        ]
+    },
+    iromomiji: {
+        title: 'Iromomiji', subtitle: 'Handmade Soba & Local Meats',
+        photo: 'https://static.gltjp.com/glt/data/article/22000/21176/20251027_095947_ecc21927_w1920.webp',
+        body: `<p>Located at the far end of Kurokawa Onsen. Known for <strong>handmade soba noodles</strong> using a 10:1 buckwheat-to-binder ratio with Aso and Nagano flour.</p>
+<p><strong>Also serves:</strong> Basashi (horse sashimi), Aso Beef, tempura</p>
+<p><strong>Price:</strong> ~&yen;2,000/person</p>
+<p><strong>Hours:</strong> Lunch only. Come early &mdash; popular with locals.</p>`,
+        links: [
+            { label: 'View on Map', url: 'https://maps.google.com/?q=Iromomiji+Kurokawa+Onsen' }
+        ]
+    },
+    ufufu: {
+        title: 'Ufufu', subtitle: 'Yakiniku & Yakitori',
+        body: `<p>One of the few dinner-friendly restaurants in town. Specializes in <strong>yakiniku (grilled meat) and yakitori (chicken skewers)</strong> using local Kumamoto meats.</p>
+<p><strong>Also serves:</strong> Basashi (horse sashimi) &mdash; a must-try regional specialty</p>
+<p><strong>Price:</strong> ~&yen;2,000/person with drinks</p>
+<p>A great option if you're not staying at a ryokan with included dinner.</p>`,
+        links: [
+            { label: 'View on Map', url: 'https://maps.google.com/?q=Ufufu+Kurokawa+Onsen' }
+        ]
+    },
+    roku: {
+        title: 'Patisserie Roku', subtitle: 'Famous Cream Puffs',
+        body: `<p>The <strong>#1 rated spot on TripAdvisor</strong> for Kurokawa Onsen. Famous for cream puffs that are about the size of softballs &mdash; overflowing with rich vanilla cream inside crisp choux pastry.</p>
+<p><strong>Price:</strong> &yen;220 per cream puff</p>
+<p>Yes, you will buy more than one. Everyone does.</p>`,
+        links: [
+            { label: 'View on Map', url: 'https://maps.google.com/?q=Patisserie+Roku+Kurokawa+Onsen' }
+        ]
+    },
+
+    /* --- Seasons --- */
+    spring: {
+        title: 'Spring', subtitle: 'March — May',
+        body: `<p>Cherry blossoms frame the Tanoharu River, fresh mountain greenery emerges, and the mild temperatures (10&ndash;20°C) are perfect for long strolls between baths.</p>
+<p>The Yu Akari illumination continues through late March, so early spring visitors get the best of both worlds.</p>
+<p><strong>Highlight:</strong> Cherry blossoms along the river walk. Bring a camera.</p>`
+    },
+    summer: {
+        title: 'Summer', subtitle: 'June — August',
+        body: `<p>Lush green canopy provides cool mountain air &mdash; a welcome escape from Kyushu's lowland humidity. Kurokawa sits at ~700m elevation, so temperatures stay comfortable (20&ndash;28°C).</p>
+<p><strong>Highlight:</strong> Fireflies dance along the riverside at dusk (June). One of Japan's most magical natural light shows.</p>
+<p>Quieter crowds and lower ryokan prices make this an underrated season.</p>`
+    },
+    autumn: {
+        title: 'Autumn', subtitle: 'Late October — Mid November',
+        photo: 'https://static.gltjp.com/glt/data/article/22000/21176/20251027_095748_95f1723b_w1920.webp',
+        body: `<p>The <strong>peak season</strong>. Vivid maples and ginkgo trees paint the gorge in reds, oranges, and golds. The contrast of autumn colors reflected in the river against rising steam is unforgettable.</p>
+<p><strong>Best dates:</strong> Late October to mid-November</p>
+<p><strong>Note:</strong> Ryokan book out weeks ahead. Reserve early. Prices are at their highest.</p>`
+    },
+    winter: {
+        title: 'Winter', subtitle: 'December — February',
+        photo: 'https://static.gltjp.com/glt/data/article/22000/21176/20251027_095807_6abe6574_w1920.webp',
+        body: `<p>The <strong>ultimate onsen season</strong>. Steam rising into freezing mountain air, snow-covered cedar rooftops, and the magical Yu Akari illumination transforming the village into a glowing wonderland.</p>
+<p><strong>Yu Akari:</strong> Mid-December through late March. 300+ handmade bamboo lanterns from sunset to 10 PM.</p>
+<p>Cold mountain air (0&ndash;8°C) makes the hot water feel transcendent. This is what onsen bathing was made for.</p>`
+    },
+
+    /* --- Nearby --- */
+    aso: {
+        title: 'Mount Aso', subtitle: "Japan's Largest Active Volcano",
+        photo: 'https://static.gltjp.com/glt/data/article/22000/21176/20251027_095955_fd071630_w1920.webp',
+        body: `<p>A short drive from Kurokawa. Japan's largest active volcano with the world's <strong>largest caldera</strong> (25km x 18km circumference ~120km).</p>
+<p>A cable car takes you to the summit of <strong>Mount Nakadake</strong>, where you can look down into the crater with its turquoise lagoon. Breathtaking panoramic views of the grassland caldera.</p>
+<p><strong>Distance:</strong> ~20km south of Kurokawa (~30 min drive)</p>`,
+        links: [
+            { label: 'View on Map', url: 'https://maps.google.com/?q=Mount+Aso+Kumamoto' },
+            { label: 'Japan Guide', url: 'https://www.japan-guide.com/e/e4552.html' }
+        ]
+    },
+    seiryu: {
+        title: 'Seiryu no Mori', subtitle: '80-Hectare Forest Park',
+        photo: 'https://static.gltjp.com/glt/data/article/22000/21176/20251027_095952_9afb3cc6_w1920.webp',
+        body: `<p>An expansive forest park with <strong>8 themed zones</strong> and walking trails through ancient cedar groves. Particularly spectacular during autumn foliage season.</p>
+<p><strong>Best for:</strong> Half-day nature walks, photography, autumn colors</p>
+<p><strong>Access:</strong> Short drive from Kurokawa Onsen</p>`,
+        links: [
+            { label: 'View on Map', url: 'https://maps.google.com/?q=Seiryu+no+Mori+Minamioguni' }
+        ]
+    },
+    mazeno: {
+        title: 'Mazeno Gorge', subtitle: 'The Secret Gorge',
+        photo: 'https://static.gltjp.com/glt/data/article/22000/21176/20251027_095959_ac10c318_w1920.webp',
+        body: `<p>Known locally as the <strong>"Secret Gorge"</strong> &mdash; open only during spring and autumn. Features massive rock slabs, waterfalls, and pristine wilderness that feels centuries away from civilization.</p>
+<p><strong>Open:</strong> Spring (Apr&ndash;May) and Autumn (Oct&ndash;Nov) only</p>
+<p>A place for those willing to make the effort to find something truly wild.</p>`,
+        links: [
+            { label: 'View on Map', url: 'https://maps.google.com/?q=Mazeno+Gorge+Minamioguni' }
+        ]
+    },
+    senomoto: {
+        title: 'Senomoto Plateau', subtitle: '360-Degree Panorama',
+        photo: 'https://static.gltjp.com/glt/data/article/22000/21176/20251027_095955_fd071630_w1920.webp',
+        body: `<p>Elevation 850&ndash;900m. Offers a <strong>360-degree panoramic view</strong> ranked #1 in "Kumamoto's 100 Scenic Green Landscapes." Rolling grasslands with views of the Aso volcanic range.</p>
+<p><strong>Best for:</strong> Photography, sunrise/sunset viewing, scenic drives</p>`,
+        links: [
+            { label: 'View on Map', url: 'https://maps.google.com/?q=Senomoto+Plateau+Kumamoto' }
+        ]
+    },
+    meoto: {
+        title: 'Meoto Falls', subtitle: 'The Matchmaking Waterfall',
+        photo: 'https://static.gltjp.com/glt/data/article/22000/21176/20251027_100007_24d56e8f_w1920.webp',
+        body: `<p>Twin waterfalls (15m and 12m drops) known as the <strong>"Matchmaking Waterfall"</strong>. Surrounded by Oguni cedar forest, the pair symbolizes a couple and is considered a romantic power spot.</p>
+<p><strong>Access:</strong> Short drive + easy walking trail from parking area</p>`,
+        links: [
+            { label: 'View on Map', url: 'https://maps.google.com/?q=Meoto+Falls+Minamioguni' }
+        ]
+    },
+    jizodo: {
+        title: 'Jizodo Shrine', subtitle: 'Birthplace of Kurokawa Onsen',
+        photo: 'https://static.gltjp.com/glt/data/article/22000/21176/20251027_095819_ab9f0ab7_w1920.webp',
+        body: `<p>A historic shrine enshrining a <strong>headless Jizo statue</strong>, established in the early Showa period. Considered the sacred <strong>"birthplace of Kurokawa Onsen."</strong></p>
+<p>Hosts dedicated onsen passes and is surrounded by <strong>giant cedar trees</strong> creating a hushed, sacred atmosphere. Locally called "Myojin-sama."</p>
+<p><strong>Cost:</strong> Free. A quiet moment of reflection between baths.</p>`,
+        links: [
+            { label: 'View on Map', url: 'https://maps.google.com/?q=Kurokawa+Shrine+Minamioguni' }
+        ]
+    }
+};
+
+/* ===========================================
+   MODAL CONTROLLER
+   =========================================== */
+function openModal(id) {
+    const data = MODAL_DATA[id];
+    if (!data) return;
+
+    let html = '';
+    if (data.photo) html += `<img class="modal-photo" src="${data.photo}" alt="${data.title}" loading="lazy">`;
+    html += `<h3>${data.title}</h3>`;
+    if (data.subtitle) html += `<div class="modal-subtitle">${data.subtitle}</div>`;
+    html += `<div class="modal-body">${data.body}</div>`;
+    if (data.links && data.links.length) {
+        html += '<div class="modal-links">';
+        data.links.forEach(l => {
+            html += `<a href="${l.url}" target="_blank" rel="noopener" class="modal-link">${l.label} &rarr;</a>`;
+        });
+        html += '</div>';
+    }
+
+    document.getElementById('modalBody').innerHTML = html;
+    document.getElementById('modalOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modalOverlay').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeModal();
+});
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+});
+
+/* ===========================================
+   SlidePresentation Controller
+   =========================================== */
+class SlidePresentation {
+    constructor() {
+        this.slides = document.querySelectorAll('.slide');
+        this.currentSlide = 0;
+        this.setupIntersectionObserver();
+        this.setupKeyboardNav();
+        this.setupTouchNav();
+        this.setupWheelNav();
+        this.setupProgressBar();
+        this.setupNavDots();
+    }
+
+    setupIntersectionObserver() {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    const idx = Array.from(this.slides).indexOf(entry.target);
+                    if (idx !== -1) { this.currentSlide = idx; this.updateNavDots(); this.updateProgressBar(); }
+                }
+            });
+        }, { threshold: 0.5 });
+        this.slides.forEach(slide => observer.observe(slide));
+    }
+
+    setupKeyboardNav() {
+        document.addEventListener('keydown', (e) => {
+            if (e.target.getAttribute('contenteditable')) return;
+            if (document.getElementById('modalOverlay').classList.contains('active')) return;
+            switch(e.key) {
+                case 'ArrowDown': case 'ArrowRight': case ' ': case 'PageDown':
+                    e.preventDefault(); this.goToSlide(this.currentSlide + 1); break;
+                case 'ArrowUp': case 'ArrowLeft': case 'PageUp':
+                    e.preventDefault(); this.goToSlide(this.currentSlide - 1); break;
+                case 'Home': e.preventDefault(); this.goToSlide(0); break;
+                case 'End': e.preventDefault(); this.goToSlide(this.slides.length - 1); break;
+            }
+        });
+    }
+
+    setupTouchNav() {
+        let startY = 0;
+        document.addEventListener('touchstart', (e) => { startY = e.touches[0].clientY; }, { passive: true });
+        document.addEventListener('touchend', (e) => {
+            const delta = startY - e.changedTouches[0].clientY;
+            if (Math.abs(delta) > 50) {
+                if (delta > 0) this.goToSlide(this.currentSlide + 1);
+                else this.goToSlide(this.currentSlide - 1);
+            }
+        }, { passive: true });
+    }
+
+    setupWheelNav() {
+        let last = 0;
+        document.addEventListener('wheel', (e) => {
+            if (document.getElementById('modalOverlay').classList.contains('active')) return;
+            const now = Date.now();
+            if (now - last < 800) return;
+            last = now;
+            if (e.deltaY > 0) this.goToSlide(this.currentSlide + 1);
+            else if (e.deltaY < 0) this.goToSlide(this.currentSlide - 1);
+        }, { passive: true });
+    }
+
+    setupProgressBar() {
+        this.progressBar = document.getElementById('progressBar');
+        this.updateProgressBar();
+    }
+
+    updateProgressBar() {
+        if (!this.progressBar) return;
+        this.progressBar.style.width = ((this.currentSlide + 1) / this.slides.length * 100) + '%';
+    }
+
+    setupNavDots() {
+        this.navDotsContainer = document.getElementById('navDots');
+        this.navDotsContainer.innerHTML = '';
+        this.slides.forEach((_, i) => {
+            const dot = document.createElement('button');
+            dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+            dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+            dot.addEventListener('click', () => this.goToSlide(i));
+            this.navDotsContainer.appendChild(dot);
+        });
+    }
+
+    updateNavDots() {
+        this.navDotsContainer.querySelectorAll('.nav-dot').forEach((dot, i) => {
+            dot.classList.toggle('active', i === this.currentSlide);
+        });
+    }
+
+    goToSlide(index) {
+        if (index < 0 || index >= this.slides.length) return;
+        this.currentSlide = index;
+        this.slides[index].scrollIntoView({ behavior: 'smooth' });
+        this.updateNavDots();
+        this.updateProgressBar();
+    }
+}
+
+/* ===========================================
+   InlineEditor
+   =========================================== */
+class InlineEditor {
+    constructor() {
+        this.isActive = false;
+        this.editToggle = document.getElementById('editToggle');
+        this.editBanner = document.getElementById('editBanner');
+        this.hotzone = document.getElementById('editHotzone');
+        this.hideTimeout = null;
+        this.storageKey = 'kurokawa-onsen-edits';
+        this.setupHotzone();
+        this.setupToggle();
+        this.setupKeyboard();
+        this.loadEdits();
+    }
+
+    setupHotzone() {
+        this.hotzone.addEventListener('mouseenter', () => { clearTimeout(this.hideTimeout); this.editToggle.classList.add('show'); });
+        this.hotzone.addEventListener('mouseleave', () => { this.hideTimeout = setTimeout(() => { if (!this.isActive) this.editToggle.classList.remove('show'); }, 400); });
+        this.editToggle.addEventListener('mouseenter', () => { clearTimeout(this.hideTimeout); });
+        this.editToggle.addEventListener('mouseleave', () => { this.hideTimeout = setTimeout(() => { if (!this.isActive) this.editToggle.classList.remove('show'); }, 400); });
+        this.hotzone.addEventListener('click', () => this.toggleEditMode());
+    }
+
+    setupToggle() { this.editToggle.addEventListener('click', () => this.toggleEditMode()); }
+
+    setupKeyboard() {
+        document.addEventListener('keydown', (e) => {
+            if ((e.key === 'e' || e.key === 'E') && !e.target.getAttribute('contenteditable')) this.toggleEditMode();
+            if (e.key === 's' && (e.ctrlKey || e.metaKey) && this.isActive) { e.preventDefault(); this.exportFile(); }
+        });
+    }
+
+    toggleEditMode() {
+        this.isActive = !this.isActive;
+        document.body.classList.toggle('edit-active', this.isActive);
+        this.editToggle.classList.toggle('active', this.isActive);
+        this.editBanner.classList.toggle('active', this.isActive);
+        this.editToggle.innerHTML = this.isActive ? '&#10003; Done' : '&#9998; Edit';
+        const sel = 'h1, h2, h3, p, span.info-text, span.step-text, .jp-text, .section-label';
+        document.querySelectorAll(sel).forEach(el => {
+            if (this.isActive) { el.setAttribute('contenteditable', 'true'); el.addEventListener('input', () => this.saveEdits()); }
+            else { el.removeAttribute('contenteditable'); }
+        });
+    }
+
+    saveEdits() {
+        const edits = {};
+        document.querySelectorAll('[contenteditable]').forEach((el, i) => { edits[i] = el.innerHTML; });
+        try { localStorage.setItem(this.storageKey, JSON.stringify(edits)); } catch(e) {}
+    }
+
+    loadEdits() {
+        try {
+            const saved = localStorage.getItem(this.storageKey);
+            if (!saved) return;
+            const edits = JSON.parse(saved);
+            const els = document.querySelectorAll('h1, h2, h3, p, span.info-text, span.step-text, .jp-text, .section-label');
+            Object.entries(edits).forEach(([i, html]) => { if (els[i]) els[i].innerHTML = html; });
+        } catch(e) {}
+    }
+
+    exportFile() {
+        const editableEls = Array.from(document.querySelectorAll('[contenteditable]'));
+        editableEls.forEach(el => el.removeAttribute('contenteditable'));
+        document.body.classList.remove('edit-active');
+        this.editToggle.classList.remove('active', 'show');
+        this.editBanner.classList.remove('active', 'show');
+        const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+        document.body.classList.add('edit-active');
+        editableEls.forEach(el => el.setAttribute('contenteditable', 'true'));
+        this.editToggle.classList.add('active');
+        this.editBanner.classList.add('active');
+        const blob = new Blob([html], { type: 'text/html' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'kurokawa-onsen.html';
+        a.click();
+        URL.revokeObjectURL(a.href);
+    }
+}
+
+/* Initialize */
+const presentation = new SlidePresentation();
+const editor = new InlineEditor();
+</script>
+</body>
+</html>
